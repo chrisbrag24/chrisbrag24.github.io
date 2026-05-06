@@ -286,10 +286,7 @@ h1 {
   
  <h2>Mini Game - Hit 48 = Clue </h2>
 
-<div style="text-align:center;">
-  <button id="startBtn" class="btn">Start Game 💕</button>
-</div>
-
+<button id="startBtn" class="btn">Start Game 💕</button>
 <canvas id="gameCanvas" width="320" height="480"></canvas>
 
 <div style="margin-top:10px; color:pink;">
@@ -339,99 +336,220 @@ function closeImg() {
   const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
+let gameStarted = false;
+
 let birdY = 200;
 let velocity = 0;
 let gravity = 0.5;
+
+let pipes = [];
 let score = 0;
 
-let gameStarted = false;
-let pipes = [];
-
-/* START GAME */
-document.getElementById("startBtn").addEventListener("click", function () {
-  gameStarted = true;
-
-  // reset everything properly
+/* IMPORTANT: force visible state */
+function resetGameState() {
   birdY = 200;
   velocity = 0;
   pipes = [];
   score = 0;
   document.getElementById("score").innerText = 0;
+}
+
+/* START BUTTON */
+document.getElementById("startBtn").addEventListener("click", function () {
+  gameStarted = true;
+  resetGameState();
 });
 
-/* BIRD */
+/* DRAW HEART */
 function drawBird() {
   ctx.font = "24px Arial";
   ctx.fillText("💖", 50, birdY);
 }
 
-/* PIPES */
+/* CREATE PIPE */
 function createPipe() {
   if (!gameStarted) return;
 
-  let gap = 120;
-  let topHeight = Math.random() * 200 + 60;
+  const gap = 120;
+  const topHeight = Math.random() * 200 + 60;
 
   pipes.push({
     x: 320,
     top: topHeight,
     bottom: topHeight + gap,
-    scored: false
+    passed: false
   });
 }
 
+/* DRAW PIPES */
 function drawPipes() {
   ctx.fillStyle = "rgba(255,105,180,0.6)";
 
-  pipes.forEach(pipe => {
-    pipe.x -= 2;
+  for (let i = 0; i < pipes.length; i++) {
+    let p = pipes[i];
+    p.x -= 2;
 
-    ctx.fillRect(pipe.x, 0, 40, pipe.top);
-    ctx.fillRect(pipe.x, pipe.bottom, 40, 480);
+    ctx.fillRect(p.x, 0, 40, p.top);
+    ctx.fillRect(p.x, p.bottom, 40, 480);
 
     // collision
     if (
-      pipe.x < 80 &&
-      pipe.x > 30 &&
-      (birdY < pipe.top || birdY > pipe.bottom)
+      p.x < 80 &&
+      p.x > 30 &&
+      (birdY < p.top || birdY > p.bottom)
     ) {
-      resetGame();
+      gameStarted = false;
+      alert("Game Over 💔 Press Start again");
     }
 
-    // score FIXED (was broken before)
-    if (!pipe.scored && pipe.x + 40 < 50) {
+    // score fix
+    if (!p.passed && p.x + 40 < 50) {
       score++;
-      pipe.scored = true;
+      p.passed = true;
       document.getElementById("score").innerText = score;
     }
-  });
+  }
 
-  pipes = pipes.filter(p => p.x > -60);
+  pipes = pipes.filter(p => p.x > -50);
 }
 
-/* RESET */
-function resetGame() {
-  gameStarted = false;
-  alert("Game Over 💔 Tap Start to play again");
-}
-
-/* GAME LOOP */
+/* MAIN LOOP */
 function update() {
-  ctx.clearRect(0, 0, 320, 480);
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  if (gameStarted) {
+  if (!gameStarted) {
+    ctx.fillStyle = "white";
+    ctx.font = "16px Arial";
+    ctx.fillText("Press START to play 💕", 70, 240);
+  } else {
     velocity += gravity;
     birdY += velocity;
 
     if (birdY > 460 || birdY < 0) {
-      resetGame();
+      gameStarted = false;
+      alert("Game Over 💔");
     }
 
     drawPipes();
-  } else {
+  }
+
+  drawBird();
+  requestAnimationFrame(update);
+}
+
+/* CONTROLS */
+document.addEventListener("keydown", () => {
+  if (gameStarted) velocity = -7;
+});
+
+document.addEventListener("click", () => {
+  if (gameStarted) velocity = -7;
+});
+
+/* PIPE SPAWN */
+setInterval(() => {
+  createPipe();
+}, 2000);
+
+/* START LOOP */
+update();const canvas = document.getElementById("gameCanvas");
+const ctx = canvas.getContext("2d");
+
+let gameStarted = false;
+
+let birdY = 200;
+let velocity = 0;
+let gravity = 0.5;
+
+let pipes = [];
+let score = 0;
+
+/* IMPORTANT: force visible state */
+function resetGameState() {
+  birdY = 200;
+  velocity = 0;
+  pipes = [];
+  score = 0;
+  document.getElementById("score").innerText = 0;
+}
+
+/* START BUTTON */
+document.getElementById("startBtn").addEventListener("click", function () {
+  gameStarted = true;
+  resetGameState();
+});
+
+/* DRAW HEART */
+function drawBird() {
+  ctx.font = "24px Arial";
+  ctx.fillText("💖", 50, birdY);
+}
+
+/* CREATE PIPE */
+function createPipe() {
+  if (!gameStarted) return;
+
+  const gap = 120;
+  const topHeight = Math.random() * 200 + 60;
+
+  pipes.push({
+    x: 320,
+    top: topHeight,
+    bottom: topHeight + gap,
+    passed: false
+  });
+}
+
+/* DRAW PIPES */
+function drawPipes() {
+  ctx.fillStyle = "rgba(255,105,180,0.6)";
+
+  for (let i = 0; i < pipes.length; i++) {
+    let p = pipes[i];
+    p.x -= 2;
+
+    ctx.fillRect(p.x, 0, 40, p.top);
+    ctx.fillRect(p.x, p.bottom, 40, 480);
+
+    // collision
+    if (
+      p.x < 80 &&
+      p.x > 30 &&
+      (birdY < p.top || birdY > p.bottom)
+    ) {
+      gameStarted = false;
+      alert("Game Over 💔 Press Start again");
+    }
+
+    // score fix
+    if (!p.passed && p.x + 40 < 50) {
+      score++;
+      p.passed = true;
+      document.getElementById("score").innerText = score;
+    }
+  }
+
+  pipes = pipes.filter(p => p.x > -50);
+}
+
+/* MAIN LOOP */
+function update() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  if (!gameStarted) {
     ctx.fillStyle = "white";
     ctx.font = "16px Arial";
-    ctx.fillText("Press Start to Play 💕", 80, 240);
+    ctx.fillText("Press START to play 💕", 70, 240);
+  } else {
+    velocity += gravity;
+    birdY += velocity;
+
+    if (birdY > 460 || birdY < 0) {
+      gameStarted = false;
+      alert("Game Over 💔");
+    }
+
+    drawPipes();
   }
 
   drawBird();
@@ -454,7 +572,6 @@ setInterval(() => {
 
 /* START LOOP */
 update();
-
  
 
 </body>

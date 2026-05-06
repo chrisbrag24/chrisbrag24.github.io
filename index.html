@@ -343,6 +343,89 @@ h1 {
   height: 420px;
   border: none;
 }
+    .music-widget {
+  position: fixed;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 180px;
+
+  background: rgba(20,20,30,0.75);
+  border: 1px solid rgba(255,192,203,0.25);
+  border-radius: 18px;
+
+  backdrop-filter: blur(12px);
+  padding: 12px;
+  color: white;
+
+  z-index: 1000000;
+
+  opacity: 0;
+  pointer-events: none;
+  transition: 0.6s;
+}
+
+.music-widget.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.music-title {
+  font-size: 13px;
+  color: pink;
+  margin-bottom: 8px;
+}
+
+#nowPlaying {
+  font-size: 11px;
+  margin-bottom: 10px;
+  color: #f5c2d7;
+}
+
+.track-list button {
+  width: 100%;
+  margin: 3px 0;
+  padding: 6px;
+  border-radius: 10px;
+
+  border: 1px solid rgba(255,192,203,0.4);
+  background: transparent;
+  color: white;
+  cursor: pointer;
+
+  font-size: 11px;
+  transition: 0.2s;
+}
+
+.track-list button:hover {
+  background: pink;
+  color: black;
+}
+
+.track-list button.active {
+  background: pink;
+  color: black;
+  box-shadow: 0 0 10px pink;
+}
+
+.controls {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+}
+
+.controls button {
+  flex: 1;
+  margin: 2px;
+  padding: 6px;
+  border-radius: 10px;
+
+  border: 1px solid pink;
+  background: transparent;
+  color: white;
+
+  cursor: pointer;
+}
 
 /* PLAY BUTTON */
 .play-overlay {
@@ -386,17 +469,23 @@ h1 {
 </head>
 
 <body>
-    <div class="music-widget">
-  <div class="music-title">Music 4 your ears💖</div>
+   <div class="music-widget">
+  <div class="music-title">🎧 Songs 4 your ears</div>
 
   <div id="nowPlaying">Not playing</div>
 
-<button onclick="selectSong('song1.mp3', this)">Song 1</button>
-<button onclick="selectSong('song2.mp3', this)">Song 2</button>
-<button onclick="selectSong('song3.mp3', this)">Song 3</button>
-<button onclick="selectSong('song4.mp3', this)">Song 4</button>
+  <div class="track-list">
+    <button onclick="playSong(0, this)">Song 1</button>
+    <button onclick="playSong(1, this)">Song 2</button>
+    <button onclick="playSong(2, this)">Song 3</button>
+    <button onclick="playSong(3, this)">Song 4</button>
+  </div>
 
-  <button onclick="togglePlay()" id="playPauseBtn">Play ⏸</button>
+  <div class="controls">
+    <button onclick="prevSong()">⏮</button>
+    <button onclick="togglePlay()" id="playBtn">▶</button>
+    <button onclick="nextSong()">⏭</button>
+  </div>
 
   <audio id="audioPlayer"></audio>
 </div>
@@ -648,69 +737,78 @@ draw();
   
 const audio = document.getElementById("audioPlayer");
 const nowPlaying = document.getElementById("nowPlaying");
-const playPauseBtn = document.getElementById("playPauseBtn");
+const playBtn = document.getElementById("playBtn");
 
-let currentButton = null;
-let isPlaying = false;
+const songs = [
+  "song1.mp3",
+  "song2.mp3",
+  "song3.mp3",
+  "song4.mp3"
+];
 
-// 🔥 IMPORTANT: unlock audio on first interaction
-function unlockAudio() {
-  audio.play().then(() => {
-    audio.pause();
-    audio.currentTime = 0;
-  }).catch(() => {});
-  document.removeEventListener("click", unlockAudio);
+let currentIndex = 0;
+let buttons = [];
+
+function preloadSongs() {
+  songs.forEach(src => {
+    const a = new Audio();
+    a.src = src;
+    a.preload = "auto";
+  });
 }
 
-document.addEventListener("click", unlockAudio, { once: true });
+function playSong(index, btn) {
+  currentIndex = index;
 
-function selectSong(file, btn) {
-  audio.pause();
-  audio.src = file;
+  audio.src = songs[index];
   audio.load();
 
-  audio.oncanplaythrough = () => {
-    audio.play().then(() => {
-      playPauseBtn.innerText = "Pause ⏸";
-      nowPlaying.innerText = "Now Playing 🎧";
+  audio.play();
 
-      if (currentButton) currentButton.classList.remove("active");
-      btn.classList.add("active");
-      currentButton = btn;
-    }).catch(err => {
-      console.log("Play failed:", err);
-    });
-  };
+  nowPlaying.innerText = "Now Playing 🎧 Song " + (index + 1);
+  playBtn.innerText = "⏸";
+
+  document.querySelectorAll(".track-list button")
+    .forEach(b => b.classList.remove("active"));
+
+  if (btn) btn.classList.add("active");
 }
 
 function togglePlay() {
-  if (!audio.src) return;
+  if (!audio.src) {
+    playSong(0);
+    return;
+  }
 
   if (audio.paused) {
     audio.play();
-    playPauseBtn.innerText = "Pause ⏸";
+    playBtn.innerText = "⏸";
   } else {
     audio.pause();
-    playPauseBtn.innerText = "Play ▶️";
+    playBtn.innerText = "▶";
   }
 }
 
-audio.onended = () => {
-  playPauseBtn.innerText = "Play ▶️";
-};
-};
+function nextSong() {
+  currentIndex = (currentIndex + 1) % songs.length;
+  playSong(currentIndex);
+}
 
-  window.addEventListener("load", () => {
-  const widget = document.querySelector(".music-widget");
+function prevSong() {
+  currentIndex = (currentIndex - 1 + songs.length) % songs.length;
+  playSong(currentIndex);
+}
 
-  if (!widget) return;
+audio.onended = () => nextSong();
+
+/* show widget after intro */
+window.addEventListener("load", () => {
+  preloadSongs();
 
   setTimeout(() => {
-    widget.classList.add("show");
-  }, 3000); // slightly longer than intro = safe
+    document.querySelector(".music-widget").classList.add("show");
+  }, 2500);
 });
-
-  audio.play().then(...)
   
   </script>
 </body>

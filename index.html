@@ -343,13 +343,15 @@ let birdY = 200;
 let velocity = 0;
 let gravity = 0.5;
 let score = 0;
-let gameStarted = false;
 
+let gameStarted = false;
 let pipes = [];
 
-/* START BUTTON */
-document.getElementById("startBtn").addEventListener("click", () => {
+/* START GAME */
+document.getElementById("startBtn").addEventListener("click", function () {
   gameStarted = true;
+
+  // reset everything properly
   birdY = 200;
   velocity = 0;
   pipes = [];
@@ -368,12 +370,13 @@ function createPipe() {
   if (!gameStarted) return;
 
   let gap = 120;
-  let topHeight = Math.random() * 200 + 50;
+  let topHeight = Math.random() * 200 + 60;
 
   pipes.push({
     x: 320,
     top: topHeight,
-    bottom: topHeight + gap
+    bottom: topHeight + gap,
+    scored: false
   });
 }
 
@@ -388,27 +391,28 @@ function drawPipes() {
 
     // collision
     if (
-      pipe.x < 70 &&
+      pipe.x < 80 &&
       pipe.x > 30 &&
       (birdY < pipe.top || birdY > pipe.bottom)
     ) {
       resetGame();
     }
 
-    // score
-    if (pipe.x === 40) {
+    // score FIXED (was broken before)
+    if (!pipe.scored && pipe.x + 40 < 50) {
       score++;
+      pipe.scored = true;
       document.getElementById("score").innerText = score;
     }
   });
 
-  pipes = pipes.filter(p => p.x > -50);
+  pipes = pipes.filter(p => p.x > -60);
 }
 
 /* RESET */
 function resetGame() {
   gameStarted = false;
-  alert("Game Over 💔 Tap Start to try again");
+  alert("Game Over 💔 Tap Start to play again");
 }
 
 /* GAME LOOP */
@@ -427,7 +431,7 @@ function update() {
   } else {
     ctx.fillStyle = "white";
     ctx.font = "16px Arial";
-    ctx.fillText("Press Start to Play 💕", 70, 240);
+    ctx.fillText("Press Start to Play 💕", 80, 240);
   }
 
   drawBird();
@@ -444,7 +448,9 @@ document.addEventListener("click", () => {
 });
 
 /* PIPE SPAWN */
-setInterval(createPipe, 2000);
+setInterval(() => {
+  createPipe();
+}, 2000);
 
 /* START LOOP */
 update();

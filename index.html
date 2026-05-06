@@ -36,20 +36,7 @@ body::before {
   z-index: -2;
 }
 
-    <div class="music-widget">
-  <div class="music-title">Music 💖</div>
 
-  <div id="nowPlaying">Not playing</div>
-
-  <button onclick="selectSong('song1.mp3', this)">Song 1</button>
-  <button onclick="selectSong('song2.mp3', this)">Song 2</button>
-  <button onclick="selectSong('song3.mp3', this)">Song 3</button>
-  <button onclick="selectSong('song4.mp3', this)">Song 4</button>
-
-  <button onclick="togglePlay()" id="playPauseBtn">Play ⏸</button>
-
-  <audio id="audioPlayer"></audio>
-</div>
     
 /* DARK OVERLAY FOR READABILITY */
 body::after {
@@ -383,7 +370,21 @@ h1 {
 </head>
 
 <body>
+    <div class="music-widget">
+  <div class="music-title">Music 💖</div>
 
+  <div id="nowPlaying">Not playing</div>
+
+  <button onclick="selectSong('song1.mp3', this)">Song 1</button>
+  <button onclick="selectSong('song2.mp3', this)">Song 2</button>
+  <button onclick="selectSong('song3.mp3', this)">Song 3</button>
+  <button onclick="selectSong('song4.mp3', this)">Song 4</button>
+
+  <button onclick="togglePlay()" id="playPauseBtn">Play ⏸</button>
+
+  <audio id="audioPlayer"></audio>
+</div>
+  
 <!-- CINEMATIC INTRO -->
 <div class="intro">
   <h1> Gwapo + Gwapa = Kita ❤️</h1>

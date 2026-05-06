@@ -92,12 +92,40 @@ h1 {
 .memory img {
   width: 100%;
   border-radius: 12px;
+  cursor: pointer;
 }
 
 .memory p {
   margin-top: 8px;
   font-size: 0.9em;
   color: #f5c2d7;
+}
+
+/* LIGHTBOX */
+.lightbox {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.9);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.lightbox img {
+  max-width: 90%;
+  max-height: 90%;
+  border-radius: 10px;
+  box-shadow: 0 0 40px rgba(255,192,203,0.4);
+  animation: zoomIn 0.2s ease;
+}
+
+@keyframes zoomIn {
+  from {transform: scale(0.7); opacity: 0;}
+  to {transform: scale(1); opacity: 1;}
 }
 
 /* FLOATING HEARTS */
@@ -123,54 +151,57 @@ h1 {
 
   <div class="days" id="daysCounter"></div>
 
-  <!-- VIDEO NOW SHOWN DIRECTLY -->
   <video class="main-video" controls>
-  <source src="Video.mp4" type="video/mp4">
-</video>
+    <source src="Video.mp4" type="video/mp4">
+  </video>
 
   <a class="btn" href="message.html">Read My Message 💌</a>
 </div>
 
-<!-- GALLERY WITH CAPTIONS -->
-<h2> 7 Favorite Memories from 2025 - 2026 📸</h2>
+<h2>7 Favorite Memories from 2025 - 2026 📸</h2>
 
 <div class="gallery">
 
   <div class="memory">
-    <img src="pic1.jpeg">
-    <p> My cover photo sa fb hehe, nindotan jud ko ani nga Taiwan pic nato ky we look really happy and nindot kaau background and our outfits pajud</p>
+    <img src="pic1.jpeg" onclick="openImg(this)">
+    <p>My cover photo sa fb hehe, nindotan jud ko ani nga Taiwan pic nato ky we look really happy and nindot kaau background and our outfits pajud</p>
   </div>
 
   <div class="memory">
-    <img src="pic2.jpeg">
-    <p> Blackpink day! Plano pa kytag outfit ani and nindot ra ang labas jud. I like this pic ky bagay kyta tanawn yieee HAHAHAHA</p>
+    <img src="pic2.jpeg" onclick="openImg(this)">
+    <p>Blackpink day! Plano pa kytag outfit ani and nindot ra ang labas jud. I like this pic ky bagay kyta tanawn yieee HAHAHAHA</p>
   </div>
 
   <div class="memory">
-    <img src="pic3.jpeg">
-    <p> Seda date natu! Although we may not have been oks ani nga day pero I'm stil thankful nga you went through with it to celebrate my 100k which couldn't have happened without your help hehe.</p>
+    <img src="pic3.jpeg" onclick="openImg(this)">
+    <p>Seda date natu! Although we may not have been oks ani nga day pero I'm still thankful nga you went through with it to celebrate my 100k hehe.</p>
   </div>
 
   <div class="memory">
-    <img src="pic4.jpeg">
-    <p> Valentines date natu. Fave memory ni nako this year ky very pretty kaayu ka niya lami pa pagkaon niya naka pottery pajud ta.</p>
+    <img src="pic4.jpeg" onclick="openImg(this)">
+    <p>Valentines date natu. Fave memory ni nako this year ky very pretty kaayu ka niya lami pa pagkaon niya naka pottery pajud ta.</p>
   </div>
 
   <div class="memory">
-    <img src="pic5.jpeg">
-    <p> Bantayan! Perfect view, perfect look, perfect picture.</p>
+    <img src="pic5.jpeg" onclick="openImg(this)">
+    <p>Bantayan! Perfect view, perfect look, perfect picture.</p>
   </div>
 
   <div class="memory">
-    <img src="pic6.jpeg">
-    <p> El Mar! Digicam pic of us together so of course favorite memory sd ni ky chuy kyta tanawn.</p>
+    <img src="pic6.jpeg" onclick="openImg(this)">
+    <p>El Mar! Digicam pic of us together so of course favorite memory sd ni ky chuy kyta tanawn.</p>
   </div>
 
   <div class="memory">
-    <img src="pic7.jpeg">
-    <p> Taiwan! My most favorite memory ni this 2025 - 2026, kaning photobooth pic natu sa taiwan. To me mao ni pinaka nindot nga pic nato together.</p>
+    <img src="pic7.jpeg" onclick="openImg(this)">
+    <p>Taiwan! My most favorite memory ni this 2025 - 2026, kaning photobooth pic natu sa taiwan.</p>
   </div>
 
+</div>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeImg()">
+  <img id="lightboxImg">
 </div>
 
 <script>
@@ -183,15 +214,12 @@ function createHeart() {
   heart.style.animationDuration = (Math.random() * 3 + 2) + "s";
   document.body.appendChild(heart);
 
-  setTimeout(() => {
-    heart.remove();
-  }, 5000);
+  setTimeout(() => heart.remove(), 5000);
 }
-
 setInterval(createHeart, 300);
 
 /* DAYS COUNTER */
-const startDate = new Date("2022-05-07"); // change if needed
+const startDate = new Date("2022-05-07");
 
 function updateDays() {
   const today = new Date();
@@ -200,8 +228,20 @@ function updateDays() {
   document.getElementById("daysCounter").innerText =
     days + " days together ❤️";
 }
-
 updateDays();
+
+/* LIGHTBOX */
+function openImg(img) {
+  const lightbox = document.getElementById("lightbox");
+  const lightboxImg = document.getElementById("lightboxImg");
+
+  lightbox.style.display = "flex";
+  lightboxImg.src = img.src;
+}
+
+function closeImg() {
+  document.getElementById("lightbox").style.display = "none";
+}
 </script>
 
 </body>

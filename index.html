@@ -618,7 +618,12 @@ function openImg(img) {
 function closeImg() {
   document.getElementById("lightbox").style.display = "none";
 }
-
+function preloadSongs() {
+  songs.forEach(src => {
+    const a = new Audio(src);
+    a.preload = "auto";
+  });
+}
   
 window.onload = function () {
 
@@ -749,13 +754,6 @@ const songs = [
 let currentIndex = 0;
 let buttons = [];
 
-function preloadSongs() {
-  songs.forEach(src => {
-    const a = new Audio();
-    a.src = src;
-    a.preload = "auto";
-  });
-}
 
 function playSong(index, btn) {
   currentIndex = index;
@@ -802,19 +800,16 @@ function prevSong() {
 audio.onended = () => nextSong();
 
 /* show widget after intro */
-document.addEventListener("DOMContentLoaded", () => {
+window.addEventListener("load", () => {
   preloadSongs();
 
   setTimeout(() => {
     const widget = document.querySelector(".music-widget");
-
-    if (!widget) {
-      console.log("Music widget not found");
-      return;
-    }
-
-    widget.classList.add("show");
+    if (widget) widget.classList.add("show");
   }, 2500);
+});
+
+  
 });
   </script>
 </body>

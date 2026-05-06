@@ -699,9 +699,13 @@ audio.onended = () => {
 };
 
   window.addEventListener("load", () => {
+  const widget = document.querySelector(".music-widget");
+
+  if (!widget) return;
+
   setTimeout(() => {
-    document.querySelector(".music-widget").classList.add("show");
-  }, 2500); // wait for intro cinematic fade
+    widget.classList.add("show");
+  }, 3000); // slightly longer than intro = safe
 });
   
   </script>

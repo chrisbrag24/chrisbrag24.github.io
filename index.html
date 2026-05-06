@@ -363,10 +363,6 @@ Score: <span id="score">0</span>
       allowfullscreen>
     </iframe>
 
-    <button class="play-overlay" onclick="playVideo()">
-      ▶ Play Movie
-    </button>
-
   </div>
 </div>
 
@@ -422,7 +418,7 @@ let gameStarted = false;
 
 let birdY = 200;
 let velocity = 0;
-let gravity = 0.5;
+let gravity = 0.4;
 
 let pipes = [];
 let score = 0;
@@ -436,33 +432,26 @@ function resetGame() {
   document.getElementById("score").innerText = 0;
 }
 
-/* START GAME ON FIRST CLICK */
-canvas.addEventListener("click", () => {
+/* START / JUMP */
+function flap() {
   if (!gameStarted) {
     gameStarted = true;
     resetGame();
-  } else {
-    velocity = -7; // flap
+    return;
   }
-});
+  velocity = -7;
+}
 
-/* ALSO WORK ON MOBILE TAP */
-canvas.addEventListener("touchstart", (e) => {
-  e.preventDefault();
-  if (!gameStarted) {
-    gameStarted = true;
-    resetGame();
-  } else {
-    velocity = -7;
-  }
-});
+/* CONTROLS */
+canvas.addEventListener("click", flap);
+document.addEventListener("keydown", flap);
 
-/* PIPE */
+/* PIPE SPAWN */
 function createPipe() {
   if (!gameStarted) return;
 
-  const gap = 120;
-  const topHeight = Math.random() * 200 + 60;
+  const gap = 140; // bigger gap = easier + no instant death
+  const topHeight = Math.random() * 180 + 80;
 
   pipes.push({
     x: 320,
@@ -484,6 +473,13 @@ function draw() {
   } else {
     velocity += gravity;
     birdY += velocity;
+
+    // floor + ceiling safety (prevents instant death bug)
+    if (birdY < 0) birdY = 0;
+    if (birdY > 460) {
+      gameStarted = false;
+      alert("Game Over 💔");
+    }
   }
 
   // bird
@@ -499,10 +495,11 @@ function draw() {
     ctx.fillRect(p.x, 0, 40, p.top);
     ctx.fillRect(p.x, p.bottom, 40, 480);
 
-    // collision
+    // ONLY check collision when pipes are near bird
     if (
-      p.x < 80 &&
-      p.x > 30 &&
+      gameStarted &&
+      p.x < 90 &&
+      p.x > 20 &&
       (birdY < p.top || birdY > p.bottom)
     ) {
       gameStarted = false;
@@ -522,9 +519,7 @@ function draw() {
   requestAnimationFrame(draw);
 }
 
-/* SPAWN PIPES */
 setInterval(createPipe, 2000);
-
 draw();
 
 };

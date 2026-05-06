@@ -13,8 +13,6 @@ body {
   text-align: center;
   overflow-x: hidden;
   position: relative;
-
-  /* fallback color (IMPORTANT) */
   background: #0b0b14;
 }
 
@@ -22,12 +20,8 @@ body {
 body::before {
   content: "";
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
 
-  /* IMPORTANT: make sure file name is EXACT */
   background: url("./pic7.jpeg") center/cover no-repeat;
 
   filter: blur(18px) brightness(0.4);
@@ -36,18 +30,13 @@ body::before {
   z-index: -2;
 }
 
-
-    
-/* DARK OVERLAY FOR READABILITY */
+/* DARK OVERLAY */
 body::after {
   content: "";
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
 
-  background: rgba(0,0,0,0.45);
+  background: radial-gradient(circle at center, transparent 40%, rgba(0,0,0,0.75));
 
   z-index: -1;
 }
@@ -86,14 +75,25 @@ body::before {
 /* INTRO OVERLAY (CINEMATIC START) */
 .intro {
   position: fixed;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   background: black;
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 99999;
-  animation: introFade 3s ease forwards;
+
+  animation: introFade 2.5s ease forwards;
+  pointer-events: none;
+}
+
+@keyframes introFade {
+  0% {opacity: 1;}
+  90% {opacity: 1;}
+  100% {
+    opacity: 0;
+    visibility: hidden;
+    display: none;
+  }
 }
   
 .intro {
@@ -155,6 +155,9 @@ body::before {
 .music-widget button:hover {
   background: pink;
   color: black;
+}
+    .music-widget {
+  z-index: 100000 !important;
 }
     
 .intro h1 {

@@ -342,8 +342,6 @@ h1 {
 </div>
   
  <h2>Mini Game - Hit 48 = Clue </h2>
-
-<button id="startBtn" class="btn">Start Game 💕</button>
 <canvas id="gameCanvas" width="320" height="480"></canvas>
 
 <div style="margin-top:10px; color:pink;">
@@ -418,115 +416,116 @@ window.onload = function () {
   /* ================= GAME ================= */
 
   const canvas = document.getElementById("gameCanvas");
-  const ctx = canvas.getContext("2d");
+const ctx = canvas.getContext("2d");
 
-  let gameStarted = false;
-  let birdY = 200;
-  let velocity = 0;
-  let gravity = 0.5;
-  let pipes = [];
-  let score = 0;
+let gameStarted = false;
 
-  const startBtn = document.getElementById("startBtn");
+let birdY = 200;
+let velocity = 0;
+let gravity = 0.5;
 
-  if (startBtn) {
-    startBtn.onclick = function (e) {
-      e.preventDefault();
-      gameStarted = true;
+let pipes = [];
+let score = 0;
 
-      birdY = 200;
-      velocity = 0;
-      pipes = [];
-      score = 0;
+/* RESET */
+function resetGame() {
+  birdY = 200;
+  velocity = 0;
+  pipes = [];
+  score = 0;
+  document.getElementById("score").innerText = 0;
+}
 
-      document.getElementById("score").innerText = 0;
-      console.log("Game started 💖");
-    };
+/* START GAME ON FIRST CLICK */
+canvas.addEventListener("click", () => {
+  if (!gameStarted) {
+    gameStarted = true;
+    resetGame();
+  } else {
+    velocity = -7; // flap
   }
+});
 
-  function drawBird() {
-    ctx.font = "24px Arial";
-    ctx.fillText("💖", 50, birdY);
+/* ALSO WORK ON MOBILE TAP */
+canvas.addEventListener("touchstart", (e) => {
+  e.preventDefault();
+  if (!gameStarted) {
+    gameStarted = true;
+    resetGame();
+  } else {
+    velocity = -7;
   }
+});
 
-  function createPipe() {
-    if (!gameStarted) return;
+/* PIPE */
+function createPipe() {
+  if (!gameStarted) return;
 
-    const gap = 120;
-    const topHeight = Math.random() * 200 + 60;
+  const gap = 120;
+  const topHeight = Math.random() * 200 + 60;
 
-    pipes.push({
-      x: 320,
-      top: topHeight,
-      bottom: topHeight + gap,
-      passed: false
-    });
-  }
-
-  function drawPipes() {
-    ctx.fillStyle = "rgba(255,105,180,0.6)";
-
-    for (let p of pipes) {
-      p.x -= 2;
-
-      ctx.fillRect(p.x, 0, 40, p.top);
-      ctx.fillRect(p.x, p.bottom, 40, 480);
-
-      if (
-        p.x < 80 &&
-        p.x > 30 &&
-        (birdY < p.top || birdY > p.bottom)
-      ) {
-        gameStarted = false;
-        alert("Game Over 💔");
-      }
-
-      if (!p.passed && p.x + 40 < 50) {
-        score++;
-        p.passed = true;
-        document.getElementById("score").innerText = score;
-      }
-    }
-
-    pipes = pipes.filter(p => p.x > -60);
-  }
-
-  function update() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    if (!gameStarted) {
-      ctx.fillStyle = "white";
-      ctx.font = "16px Arial";
-      ctx.fillText("Press START to play 💕", 70, 240);
-    } else {
-      velocity += gravity;
-      birdY += velocity;
-
-      drawPipes();
-    }
-
-    drawBird();
-    requestAnimationFrame(update);
-  }
-
-  document.addEventListener("keydown", () => {
-    if (gameStarted) velocity = -7;
+  pipes.push({
+    x: 320,
+    top: topHeight,
+    bottom: topHeight + gap,
+    passed: false
   });
+}
 
-  setInterval(createPipe, 2000);
-  update();
+/* DRAW */
+function draw() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  /* ================= MOVIE BUTTON ================= */
+  // idle screen
+  if (!gameStarted) {
+    ctx.fillStyle = "white";
+    ctx.font = "16px Arial";
+    ctx.fillText("Click to Start 💖", 90, 240);
+  } else {
+    velocity += gravity;
+    birdY += velocity;
+  }
 
-  const playBtn = document.querySelector(".play-overlay");
-  const iframe = document.getElementById("driveVideo");
+  // bird
+  ctx.font = "24px Arial";
+  ctx.fillText("💖", 50, birdY);
 
-  if (playBtn && iframe) {
-    playBtn.onclick = function () {
-      iframe.src = iframe.src;
-      playBtn.style.display = "none";
-      console.log("Movie playing 🎬");
-    };
+  // pipes
+  ctx.fillStyle = "rgba(255,105,180,0.6)";
+
+  for (let p of pipes) {
+    p.x -= 2;
+
+    ctx.fillRect(p.x, 0, 40, p.top);
+    ctx.fillRect(p.x, p.bottom, 40, 480);
+
+    // collision
+    if (
+      p.x < 80 &&
+      p.x > 30 &&
+      (birdY < p.top || birdY > p.bottom)
+    ) {
+      gameStarted = false;
+      alert("Game Over 💔");
+    }
+
+    // score
+    if (!p.passed && p.x + 40 < 50) {
+      score++;
+      p.passed = true;
+      document.getElementById("score").innerText = score;
+    }
+  }
+
+  pipes = pipes.filter(p => p.x > -60);
+
+  requestAnimationFrame(draw);
+}
+
+/* SPAWN PIPES */
+setInterval(createPipe, 2000);
+
+draw();
 
 };
 

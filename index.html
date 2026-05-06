@@ -635,52 +635,34 @@ function draw() {
 setInterval(createPipe, 2000);
 draw();
   
-const audio = document.getElementById("audioPlayer");
-const nowPlaying = document.getElementById("nowPlaying");
-const playPauseBtn = document.getElementById("playPauseBtn");
-
-let currentButton = null;
-let isPlaying = false;
-
 function selectSong(file, btn) {
+  const audio = document.getElementById("audioPlayer");
+
+  audio.pause();
+  audio.currentTime = 0;
+
   audio.src = file;
-  audio.play();
+  audio.load(); // IMPORTANT FIX
+
+  const playPromise = audio.play();
+
+  if (playPromise !== undefined) {
+    playPromise.catch(err => {
+      console.log("Audio blocked or not found:", err);
+    });
+  }
 
   isPlaying = true;
   playPauseBtn.innerText = "Pause ⏸";
 
   nowPlaying.innerText = "Now Playing 🎧";
 
-  // remove old highlight
   document.querySelectorAll(".music-widget button").forEach(b => {
     if (b !== playPauseBtn) b.classList.remove("active");
   });
 
-  // highlight current
   btn.classList.add("active");
-  currentButton = btn;
 }
-
-function togglePlay() {
-  if (!audio.src) return;
-
-  if (isPlaying) {
-    audio.pause();
-    isPlaying = false;
-    playPauseBtn.innerText = "Play ▶️";
-  } else {
-    audio.play();
-    isPlaying = true;
-    playPauseBtn.innerText = "Pause ⏸";
-  }
-}
-
-// when song ends
-audio.onended = function () {
-  isPlaying = false;
-  playPauseBtn.innerText = "Play ▶️";
-};
-
 };
 
   </script>

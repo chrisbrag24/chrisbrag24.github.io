@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Happy 4th Anniversary Bab ❤️</title>
+<title>Happy 4th Anniversary ❤️</title>
 
 <style>
 body {
@@ -12,27 +12,60 @@ body {
   color: white;
   text-align: center;
   overflow-x: hidden;
-  background: radial-gradient(circle at top, #0d0d1a, #000000);
+  background: radial-gradient(circle at top, #0b0b14, #000000);
   animation: fadeIn 2s ease;
 }
 
-/* CINEMATIC GRAIN */
+/* CINEMATIC VIGNETTE */
+body::after {
+  content: "";
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  background: radial-gradient(circle at center, transparent 40%, rgba(0,0,0,0.8));
+}
+
+/* NOISE FILM EFFECT */
 body::before {
   content: "";
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
   background: url('https://grainy-gradients.vercel.app/noise.svg');
   opacity: 0.05;
   pointer-events: none;
 }
 
-/* FADE IN */
-@keyframes fadeIn {
-  from {opacity: 0;}
-  to {opacity: 1;}
+/* INTRO OVERLAY (CINEMATIC START) */
+.intro {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 99999;
+  animation: introFade 3s ease forwards;
+}
+
+.intro h1 {
+  font-size: 2em;
+  letter-spacing: 2px;
+  color: pink;
+  animation: zoomIn 2s ease;
+}
+
+@keyframes introFade {
+  0% {opacity: 1;}
+  80% {opacity: 1;}
+  100% {opacity: 0; visibility: hidden;}
+}
+
+@keyframes zoomIn {
+  from {transform: scale(0.8); opacity: 0;}
+  to {transform: scale(1); opacity: 1;}
 }
 
 /* HERO */
@@ -43,13 +76,27 @@ body::before {
   justify-content: center;
   align-items: center;
   padding: 20px;
+  animation: fadeIn 2s ease;
 }
 
+@keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity: 1;}
+}
+
+/* HEARTBEAT TITLE */
 h1 {
   font-size: 3em;
   text-shadow: 0 0 25px rgba(255,192,203,0.6);
+  animation: heartbeat 2.5s infinite;
 }
 
+@keyframes heartbeat {
+  0%, 100% {transform: scale(1);}
+  50% {transform: scale(1.05);}
+}
+
+/* DAYS */
 .days {
   font-size: 1.5em;
   color: pink;
@@ -63,14 +110,14 @@ h1 {
   max-width: 700px;
   margin-top: 20px;
   border-radius: 15px;
-  box-shadow: 0 0 35px rgba(255,192,203,0.25);
+  box-shadow: 0 0 40px rgba(255,192,203,0.25);
 }
 
 /* BUTTON */
 .btn {
   margin-top: 20px;
   padding: 12px 25px;
-  background: rgba(255,192,203,0.15);
+  background: rgba(255,192,203,0.12);
   border: 1px solid pink;
   border-radius: 30px;
   cursor: pointer;
@@ -83,7 +130,7 @@ h1 {
 .btn:hover {
   background: pink;
   color: black;
-  box-shadow: 0 0 25px pink;
+  box-shadow: 0 0 30px pink;
 }
 
 /* GALLERY */
@@ -99,13 +146,13 @@ h1 {
   border: 1px solid rgba(255,255,255,0.1);
   border-radius: 15px;
   padding: 10px;
-  backdrop-filter: blur(8px);
-  transition: 0.3s;
+  backdrop-filter: blur(10px);
+  transition: 0.4s;
 }
 
 .memory:hover {
-  transform: scale(1.04);
-  box-shadow: 0 0 25px rgba(255,192,203,0.3);
+  transform: translateY(-5px) scale(1.03);
+  box-shadow: 0 0 35px rgba(255,192,203,0.25);
 }
 
 .memory img {
@@ -127,7 +174,7 @@ h1 {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0,0,0,0.92);
+  background: rgba(0,0,0,0.95);
   display: none;
   justify-content: center;
   align-items: center;
@@ -138,13 +185,8 @@ h1 {
   max-width: 90%;
   max-height: 90%;
   border-radius: 12px;
-  box-shadow: 0 0 50px rgba(255,192,203,0.4);
-  animation: zoomIn 0.25s ease;
-}
-
-@keyframes zoomIn {
-  from {transform: scale(0.7); opacity: 0;}
-  to {transform: scale(1); opacity: 1;}
+  box-shadow: 0 0 60px rgba(255,192,203,0.4);
+  animation: zoomIn 0.3s ease;
 }
 
 /* FLOATING HEARTS */
@@ -160,21 +202,15 @@ h1 {
   20% {opacity: 0.6;}
   100% {transform: translateY(-100vh); opacity: 0;}
 }
-
-/* FLOATING PARTICLES */
-.particle {
-  position: fixed;
-  width: 5px;
-  height: 5px;
-  background: pink;
-  border-radius: 50%;
-  opacity: 0.4;
-  animation: floatUp 8s linear infinite;
-}
 </style>
 </head>
 
 <body>
+
+<!-- CINEMATIC INTRO -->
+<div class="intro">
+  <h1>Our Story Begins ❤️</h1>
+</div>
 
 <!-- HERO -->
 <div class="hero">
@@ -186,15 +222,15 @@ h1 {
     <source src="Video.mp4" type="video/mp4">
   </video>
 
-  <a class="btn" href="message.html">Click to read my message for you 💌</a>
+  <a class="btn" href="message.html">Read My Message 💌</a>
 
-  <!-- HIDDEN CROWN CLUE -->
-  <a class="btn" href="surprise.html" style="opacity:0.15; font-size:12px;">
+  <!-- hidden crown clue -->
+  <a class="btn" href="surprise.html" style="opacity:0.12; font-size:11px;">
     .
   </a>
 </div>
 
-<h2>7 Favorite Memories from 2025 - 2026 📸</h2>
+<h2>7 Favorite Memories 📸</h2>
 
 <div class="gallery">
 
@@ -210,12 +246,12 @@ h1 {
 
   <div class="memory">
     <img src="pic3.jpeg" onclick="openImg(this)">
-    <p>Seda date natu! Although we may not have been oks ani nga day pero I'm still thankful.</p>
+    <p>Seda date natu! Although we may not have been oks ani nga day pero I'm still thankful nga you went through with it to celebrate my 100k hehe.</p>
   </div>
 
   <div class="memory">
     <img src="pic4.jpeg" onclick="openImg(this)">
-    <p>Valentines date natu. Fave memory ni nako this year 💖</p>
+    <p>Valentines date natu. Fave memory ni nako this year ky very pretty kaayu ka niya lami pa pagkaon niya naka pottery pajud ta.</p>
   </div>
 
   <div class="memory">
@@ -225,12 +261,12 @@ h1 {
 
   <div class="memory">
     <img src="pic6.jpeg" onclick="openImg(this)">
-    <p>El Mar! Digicam pic of us together.</p>
+    <p>El Mar! Digicam pic of us together so of course favorite memory sd ni ky chuy kyta tanawn.</p>
   </div>
 
   <div class="memory">
     <img src="pic7.jpeg" onclick="openImg(this)">
-    <p>Taiwan! My most favorite memory 💖</p>
+    <p>Taiwan! My most favorite memory ni this 2025 - 2026, kaning photobooth pic natu sa taiwan.</p>
   </div>
 
 </div>
@@ -253,20 +289,8 @@ function createHeart() {
 }
 setInterval(createHeart, 400);
 
-/* PARTICLES */
-function createParticle() {
-  const p = document.createElement("div");
-  p.classList.add("particle");
-  p.style.left = Math.random() * 100 + "vw";
-  p.style.animationDuration = (5 + Math.random() * 5) + "s";
-  document.body.appendChild(p);
-  setTimeout(() => p.remove(), 8000);
-}
-setInterval(createParticle, 500);
-
-/* DAYS COUNTER */
+/* DAYS */
 const startDate = new Date("2022-05-07");
-
 function updateDays() {
   const today = new Date();
   const diff = today - startDate;

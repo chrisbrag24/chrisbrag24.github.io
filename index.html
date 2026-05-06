@@ -119,6 +119,15 @@ body::before {
   color: white;
 
   z-index: 1000000;
+
+  opacity: 0;
+  pointer-events: none;
+  transition: 0.8s;
+}
+
+.music-widget.show {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .music-title {
@@ -131,11 +140,6 @@ body::before {
   color: black;
   box-shadow: 0 0 15px pink;
   transform: scale(1.05);
-}
-    .music-widget {
-  opacity: 0;
-  pointer-events: none;
-  transition: 0.8s;
 }
 
 .music-widget.show {

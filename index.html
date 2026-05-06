@@ -802,14 +802,20 @@ function prevSong() {
 audio.onended = () => nextSong();
 
 /* show widget after intro */
-window.addEventListener("load", () => {
+document.addEventListener("DOMContentLoaded", () => {
   preloadSongs();
 
   setTimeout(() => {
-    document.querySelector(".music-widget").classList.add("show");
+    const widget = document.querySelector(".music-widget");
+
+    if (!widget) {
+      console.log("Music widget not found");
+      return;
+    }
+
+    widget.classList.add("show");
   }, 2500);
 });
-  
   </script>
 </body>
 </html>

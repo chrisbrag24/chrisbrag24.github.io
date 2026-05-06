@@ -9,10 +9,30 @@
 body {
   margin: 0;
   font-family: 'Segoe UI', sans-serif;
-  background: radial-gradient(circle at top, #1a1a2e, #0f0f1a);
   color: white;
   text-align: center;
   overflow-x: hidden;
+  background: radial-gradient(circle at top, #0d0d1a, #000000);
+  animation: fadeIn 2s ease;
+}
+
+/* CINEMATIC GRAIN */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('https://grainy-gradients.vercel.app/noise.svg');
+  opacity: 0.05;
+  pointer-events: none;
+}
+
+/* FADE IN */
+@keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity: 1;}
 }
 
 /* HERO */
@@ -22,13 +42,12 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  backdrop-filter: blur(10px);
   padding: 20px;
 }
 
 h1 {
   font-size: 3em;
-  text-shadow: 0 0 20px rgba(255,192,203,0.6);
+  text-shadow: 0 0 25px rgba(255,192,203,0.6);
 }
 
 .days {
@@ -44,14 +63,14 @@ h1 {
   max-width: 700px;
   margin-top: 20px;
   border-radius: 15px;
-  box-shadow: 0 0 30px rgba(255, 192, 203, 0.3);
+  box-shadow: 0 0 35px rgba(255,192,203,0.25);
 }
 
 /* BUTTON */
 .btn {
   margin-top: 20px;
   padding: 12px 25px;
-  background: rgba(255,192,203,0.2);
+  background: rgba(255,192,203,0.15);
   border: 1px solid pink;
   border-radius: 30px;
   cursor: pointer;
@@ -64,7 +83,7 @@ h1 {
 .btn:hover {
   background: pink;
   color: black;
-  box-shadow: 0 0 20px pink;
+  box-shadow: 0 0 25px pink;
 }
 
 /* GALLERY */
@@ -80,13 +99,13 @@ h1 {
   border: 1px solid rgba(255,255,255,0.1);
   border-radius: 15px;
   padding: 10px;
-  backdrop-filter: blur(6px);
+  backdrop-filter: blur(8px);
   transition: 0.3s;
 }
 
 .memory:hover {
-  transform: scale(1.03);
-  box-shadow: 0 0 20px rgba(255,192,203,0.3);
+  transform: scale(1.04);
+  box-shadow: 0 0 25px rgba(255,192,203,0.3);
 }
 
 .memory img {
@@ -108,7 +127,7 @@ h1 {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0,0,0,0.9);
+  background: rgba(0,0,0,0.92);
   display: none;
   justify-content: center;
   align-items: center;
@@ -118,9 +137,9 @@ h1 {
 .lightbox img {
   max-width: 90%;
   max-height: 90%;
-  border-radius: 10px;
-  box-shadow: 0 0 40px rgba(255,192,203,0.4);
-  animation: zoomIn 0.2s ease;
+  border-radius: 12px;
+  box-shadow: 0 0 50px rgba(255,192,203,0.4);
+  animation: zoomIn 0.25s ease;
 }
 
 @keyframes zoomIn {
@@ -133,12 +152,24 @@ h1 {
   position: fixed;
   bottom: -10px;
   font-size: 20px;
-  animation: floatUp 5s linear infinite;
+  animation: floatUp 6s linear infinite;
 }
 
 @keyframes floatUp {
-  0% {transform: translateY(0); opacity: 1;}
+  0% {transform: translateY(0); opacity: 0;}
+  20% {opacity: 0.6;}
   100% {transform: translateY(-100vh); opacity: 0;}
+}
+
+/* FLOATING PARTICLES */
+.particle {
+  position: fixed;
+  width: 5px;
+  height: 5px;
+  background: pink;
+  border-radius: 50%;
+  opacity: 0.4;
+  animation: floatUp 8s linear infinite;
 }
 </style>
 </head>
@@ -155,7 +186,12 @@ h1 {
     <source src="Video.mp4" type="video/mp4">
   </video>
 
-  <a class="btn" href="message.html">Read My Message 💌</a>
+  <a class="btn" href="message.html">Click to read my message for you 💌</a>
+
+  <!-- HIDDEN CROWN CLUE -->
+  <a class="btn" href="surprise.html" style="opacity:0.15; font-size:12px;">
+    .
+  </a>
 </div>
 
 <h2>7 Favorite Memories from 2025 - 2026 📸</h2>
@@ -174,12 +210,12 @@ h1 {
 
   <div class="memory">
     <img src="pic3.jpeg" onclick="openImg(this)">
-    <p>Seda date natu! Although we may not have been oks ani nga day pero I'm still thankful nga you went through with it to celebrate my 100k hehe.</p>
+    <p>Seda date natu! Although we may not have been oks ani nga day pero I'm still thankful.</p>
   </div>
 
   <div class="memory">
     <img src="pic4.jpeg" onclick="openImg(this)">
-    <p>Valentines date natu. Fave memory ni nako this year ky very pretty kaayu ka niya lami pa pagkaon niya naka pottery pajud ta.</p>
+    <p>Valentines date natu. Fave memory ni nako this year 💖</p>
   </div>
 
   <div class="memory">
@@ -189,12 +225,12 @@ h1 {
 
   <div class="memory">
     <img src="pic6.jpeg" onclick="openImg(this)">
-    <p>El Mar! Digicam pic of us together so of course favorite memory sd ni ky chuy kyta tanawn.</p>
+    <p>El Mar! Digicam pic of us together.</p>
   </div>
 
   <div class="memory">
     <img src="pic7.jpeg" onclick="openImg(this)">
-    <p>Taiwan! My most favorite memory ni this 2025 - 2026, kaning photobooth pic natu sa taiwan.</p>
+    <p>Taiwan! My most favorite memory 💖</p>
   </div>
 
 </div>
@@ -211,20 +247,30 @@ function createHeart() {
   heart.classList.add("heart");
   heart.innerHTML = "❤️";
   heart.style.left = Math.random() * 100 + "vw";
-  heart.style.animationDuration = (Math.random() * 3 + 2) + "s";
+  heart.style.animationDuration = (Math.random() * 3 + 3) + "s";
   document.body.appendChild(heart);
-
-  setTimeout(() => heart.remove(), 5000);
+  setTimeout(() => heart.remove(), 6000);
 }
-setInterval(createHeart, 300);
+setInterval(createHeart, 400);
+
+/* PARTICLES */
+function createParticle() {
+  const p = document.createElement("div");
+  p.classList.add("particle");
+  p.style.left = Math.random() * 100 + "vw";
+  p.style.animationDuration = (5 + Math.random() * 5) + "s";
+  document.body.appendChild(p);
+  setTimeout(() => p.remove(), 8000);
+}
+setInterval(createParticle, 500);
 
 /* DAYS COUNTER */
 const startDate = new Date("2022-05-07");
 
 function updateDays() {
   const today = new Date();
-  const diffTime = today - startDate;
-  const days = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+  const diff = today - startDate;
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
   document.getElementById("daysCounter").innerText =
     days + " days together ❤️";
 }
@@ -232,11 +278,8 @@ updateDays();
 
 /* LIGHTBOX */
 function openImg(img) {
-  const lightbox = document.getElementById("lightbox");
-  const lightboxImg = document.getElementById("lightboxImg");
-
-  lightbox.style.display = "flex";
-  lightboxImg.src = img.src;
+  document.getElementById("lightbox").style.display = "flex";
+  document.getElementById("lightboxImg").src = img.src;
 }
 
 function closeImg() {

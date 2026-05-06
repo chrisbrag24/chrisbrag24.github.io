@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Anniversary ❤️</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(to bottom, #0f0f1a, #1c1c2e);
+  color: white;
+  text-align: center;
+  overflow-x: hidden;
+}
+
+/* HERO */
+.hero {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+h1 {
+  font-size: 3em;
+}
+
+.days {
+  font-size: 1.5em;
+  color: pink;
+  margin-top: 10px;
+}
+
+/* BUTTON */
+.btn {
+  margin-top: 20px;
+  padding: 12px 25px;
+  background: pink;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+}
+
+/* GALLERY */
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+  padding: 20px;
+}
+
+.gallery img {
+  width: 100%;
+  border-radius: 15px;
+  transition: 0.3s;
+}
+
+.gallery img:hover {
+  transform: scale(1.08);
+}
+
+/* VIDEO POPUP */
+.video-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.95);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.video-popup video {
+  width: 80%;
+  border-radius: 20px;
+}
+
+.close {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  font-size: 30px;
+  cursor: pointer;
+}
+
+/* FLOATING HEARTS */
+.heart {
+  position: fixed;
+  bottom: -10px;
+  font-size: 20px;
+  animation: floatUp 5s linear infinite;
+}
+
+@keyframes floatUp {
+  0% {transform: translateY(0); opacity: 1;}
+  100% {transform: translateY(-100vh); opacity: 0;}
+}
+</style>
+</head>
+
+<body>
+
+<!-- VIDEO POPUP AUTO -->
+<div class="video-popup" id="videoPopup">
+  <span class="close" onclick="closeVideo()">✖</span>
+  <video autoplay controls>
+    <source src="video.mp4" type="video/mp4">
+  </video>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <h1>Happy 4th Anniversary ❤️</h1>
+  <div class="days">1461 days together</div>
+  <button class="btn" onclick="goToMessage()">Read My Message 💌</button>
+</div>
+
+<!-- GALLERY -->
+<h2>Our Memories 📸</h2>
+<div class="gallery">
+  <img src="pic1.jpg">
+  <img src="pic2.jpg">
+  <img src="pic3.jpg">
+  <img src="pic4.jpg">
+  <img src="pic5.jpg">
+  <img src="pic6.jpg">
+  <img src="pic7.jpg">
+</div>
+
+<script>
+function closeVideo() {
+  document.getElementById("videoPopup").style.display = "none";
+}
+
+function goToMessage() {
+  window.location.href = "message.html";
+}
+
+/* HEART ANIMATION */
+function createHeart() {
+  const heart = document.createElement("div");
+  heart.classList.add("heart");
+  heart.innerHTML = "❤️";
+  heart.style.left = Math.random() * 100 + "vw";
+  heart.style.animationDuration = (Math.random() * 3 + 2) + "s";
+  document.body.appendChild(heart);
+
+  setTimeout(() => {
+    heart.remove();
+  }, 5000);
+}
+
+setInterval(createHeart, 300);
+</script>
+
+</body>
+</html>
